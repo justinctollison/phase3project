@@ -18,15 +18,20 @@ class ApplicationController < Sinatra::Base
 
   get "/pokemon/:id/reviews" do
     pokemon = Pokemon.find(params[:id])
-    pokemon.to_json(only: [], include: { 
-      reviews: { only: [:rating, :text]}
-    })
+    pokemon.to_json(only: [], include: :reviews
+    )
+  end
+
+  get "/reviews" do 
+    reviews = Review.all
+    reviews.to_json
   end
 
   post "/reviews" do
     review = Review.create(
       rating: params[:rating],
-      text: params[:text]
+      text: params[:text],
+      pokemon_id: params[:pokemon_id]
     )
     review.to_json
   end
